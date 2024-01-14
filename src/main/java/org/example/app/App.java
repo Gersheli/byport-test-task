@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.app;
 
 import org.example.dao.EmployeeDao;
 import org.example.models.Employee;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.text.SimpleDateFormat;
 
 @Component
-public class Service {
+public class App {
     private final EmployeeDao employeeDao;
     private int curEmpId = 1;
     private int curMonth = 0;
@@ -29,7 +29,7 @@ public class Service {
     private JTable planTable;
 
     @Autowired
-    public Service(EmployeeDao employeeDao) {
+    public App(EmployeeDao employeeDao) {
         this.employeeDao = employeeDao;
     }
 
@@ -128,14 +128,13 @@ public class Service {
         List<Task> tasks = employeeDao.get(curEmpId).getTasks();
         int rows = 0;
         for (Task task : tasks) {
-            if (task.getDateStart().getMonth() == curMonth ||
-                    task.getDateEnd().getMonth() == curMonth)
+            if (task.getDateStart().getMonth() == curMonth || task.getDateEnd().getMonth() == curMonth)
                 rows++;
         }
+
         Object[][] data = new Object[rows][daysInMonth];
         for (int i = 0, j = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).getDateStart().getMonth() == curMonth ||
-                    tasks.get(i).getDateEnd().getMonth() == curMonth) {
+            if (tasks.get(i).getDateStart().getMonth() == curMonth || tasks.get(i).getDateEnd().getMonth() == curMonth) {
                 data[j][0] = tasks.get(i).getName();
                 j++;
             }
@@ -152,7 +151,6 @@ public class Service {
             Date dateEnd = tasks.get(i).getDateEnd();
             int start = 1;
             int end = planTable.getColumnCount() - 1;
-            boolean flag = false;
             if (dateStart.getMonth() == curMonth) {
                 calendar.setTime(dateStart);
                 start = calendar.get(Calendar.DAY_OF_MONTH);
@@ -160,13 +158,11 @@ public class Service {
                 if (calendar.get(Calendar.DAY_OF_MONTH) == curMonth) {
                     end = calendar.get(Calendar.DAY_OF_MONTH);
                 }
-                flag = true;
             } else if (dateEnd.getMonth() == curMonth) {
                 calendar.setTime(dateEnd);
                 end = calendar.get(Calendar.DAY_OF_MONTH);
-                flag = true;
             }
-            if (flag) {
+            if (dateStart.getMonth() == curMonth || dateEnd.getMonth() == curMonth) {
                 if (cellRenderer == null)
                     cellRenderer = new GrayCellRenderer(i, start, end);
                 else

@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.app;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
